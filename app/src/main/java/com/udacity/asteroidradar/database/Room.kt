@@ -8,20 +8,26 @@ import com.udacity.asteroidradar.api.AsteroidPODDTO
 
 @Dao
 interface AsteroidDao {
-    @Query("select * from databaseasteroid")
+    @Query("select * from databaseasteroid ORDER BY closeApproachDate DESC")
     fun getAsteroids(): LiveData<List<DatabaseAsteroid>>
+
+    @Query("SELECT * FROM databaseasteroid WHERE closeApproachDate BETWEEN :startOfWeek AND :endOfWeek ORDER BY closeApproachDate DESC")
+    fun getAsteroidsThisWeek(startOfWeek: String, endOfWeek: String): LiveData<List<DatabaseAsteroid>>
+
+    @Query("SELECT * FROM databaseasteroid WHERE closeApproachDate = :today ORDER BY closeApproachDate DESC")
+    fun getAsteroidsToday(today: String): LiveData<List<DatabaseAsteroid>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAsteroids(vararg asteroids: DatabaseAsteroid)
 
     @Query("select * from databaseapod")
-    fun getAsteroidPOD(): LiveData<AsteroidPODDTO>
+    fun getAsteroidPOD(): LiveData<DatabaseAPOD>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAsteroidPOD(vararg asteroids: DatabaseAPOD)
+    fun insertAsteroidPOD( asteroids: DatabaseAPOD)
 }
 
-@Database(entities = [DatabaseAsteroid::class, DatabaseAPOD::class], version = 1)
+@Database(entities = [DatabaseAsteroid::class, DatabaseAPOD::class], version = 2, exportSchema = false)
 abstract class AsteroidDatabase : RoomDatabase() {
     abstract val asteroidDao: AsteroidDao
 }
@@ -34,7 +40,7 @@ fun getDatabase(context: Context): AsteroidDatabase {
             INSTANCE = Room.databaseBuilder(
                 context.applicationContext,
                 AsteroidDatabase::class.java,
-                "videos"
+                "asteroids"
             ).build()
         }
     }

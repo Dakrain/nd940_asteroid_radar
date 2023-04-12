@@ -6,7 +6,7 @@ import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.AsteroidPOD
 
 @Entity
-data class DatabaseAsteroid(
+data class DatabaseAsteroid constructor(
     @PrimaryKey
     val id: Long, val codename: String, val closeApproachDate: String,
     val absoluteMagnitude: Double, val estimatedDiameter: Double,
@@ -15,7 +15,7 @@ data class DatabaseAsteroid(
 )
 
 @Entity
-data class DatabaseAPOD(
+data class DatabaseAPOD constructor(
     @PrimaryKey
     val url: String,
     val title: String,

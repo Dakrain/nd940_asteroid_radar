@@ -1,9 +1,7 @@
 package com.udacity.asteroidradar.api
 
-import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.database.DatabaseAPOD
 import com.udacity.asteroidradar.database.DatabaseAsteroid
 import com.udacity.asteroidradar.domain.Asteroid
@@ -21,7 +19,7 @@ data class AsteroidDTO(
 data class AsteroidPODDTO(
     val url: String,
     val title: String,
-    val mediaType: String,
+    @Json(name = "media_type") val mediaType: String,
 )
 
 
